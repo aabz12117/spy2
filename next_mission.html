@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الاختراق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            font-family: 'Cairo', sans-serif;
+            color: #00ff00;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .شاشة-الاختراق {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0.03) 0px,
+                rgba(0, 255, 0, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            animation: مسح 8s linear infinite;
+        }
+
+        @keyframes مسح {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .حاوية {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 10, 0, 0.7);
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 600px) {
+            .حاوية {
+                margin: 10px;
+                padding: 15px;
+            }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #00ff00;
+            position: relative;
+        }
+
+        h1::before {
+            content: ">";
+            position: absolute;
+            right: -30px;
+            animation: وميض 1s infinite;
+        }
+
+        @keyframes وميض {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .حاوية-الإحداثيات {
+            background: rgba(0, 20, 0, 0.8);
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #00ff00;
+            position: relative;
+        }
+
+        .إحداثيات {
+            font-size: 1.8em;
+            text-align: center;
+            margin: 10px 0;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .زر {
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 12px 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+            position: relative;
+            overflow: hidden;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .زر::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 2px;
+            background: #00ff00;
+            animation: خط-متحرك 2s infinite linear;
+        }
+
+        @keyframes خط-متحرك {
+            0% { right: -100%; }
+            100% { right: 200%; }
+        }
+
+        .زر:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        .حقل-إدخال {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 20, 0, 0.8);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-size: 1.2em;
+            margin: 20px 0;
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+        }
+
+        .حقل-إدخال:focus {
+            outline: none;
+            box-shadow: 0 0 15px #00ff00;
+        }
+
+        .نافذة-منبثقة {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 20, 0, 0.95);
+            padding: 30px;
+            border: 2px solid #00ff00;
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 0 30px #00ff00;
+            animation: تشويش 0.3s infinite;
+        }
+
+        @keyframes تشويش {
+            0% { transform: translate(-50%, -50%) skew(0deg); }
+            20% { transform: translate(-50%, -50%) skew(3deg); }
+            40% { transform: translate(-50%, -50%) skew(-3deg); }
+            60% { transform: translate(-50%, -50%) skew(2deg); }
+            80% { transform: translate(-50%, -50%) skew(-2deg); }
+            100% { transform: translate(-50%, -50%) skew(0deg); }
+        }
+
+        .سطر-الحالة {
+            font-size: 0.9em;
+            color: #00ff00;
+            margin-top: 20px;
+            padding: 10px;
+            border-top: 1px solid #00ff00;
+            direction: rtl;
+        }
+    </style>
+</head>
+<body>
+    <div class="شاشة-الاختراق"></div>
+    <div class="حاوية">
+        <h1>نظام الاختراق</h1>
+        
+        <div class="حاوية-الإحداثيات">
+            <div class="إحداثيات" id="coordinates">
+                [24°38'46.3"N 46°30'46.1"E]
+            </div>
+            <button class="زر" onclick="copyCoordinates()">نسخ الإحداثيات</button>
+        </div>
+
+        <input type="text" id="place-name" class="حقل-إدخال" placeholder="أدخل اسم الموقع >">
+        <button class="زر" onclick="checkPlace()">تنفيذ التحقق</button>
+        
+        <div class="سطر-الحالة">
+            [النظام] في انتظار ادخال اسم مكان الاحداثيات ...
+        </div>
+    </div>
+
+    <div id="success-popup" class="نافذة-منبثقة">
+        <h2>تم الوصول</h2>
+        <p>تم اختراق الموقع بنجاح</p>
+        <button class="زر" onclick="nextChallenge()">الانتقال للمستوى التالي</button>
+    </div>
+
+    <div id="error-popup" class="نافذة-منبثقة">
+        <h2>تم الرفض</h2>
+        <p>فشل التحقق من الموقع. حاول مرة أخرى.</p>
+        <button class="زر" onclick="closeErrorPopup()">إعادة المحاولة</button>
+    </div>
+
+    <script>
+        // قائمة الكلمات المفتاحية الصحيحة التي تشمل كلمات جزئية وأخطاء إملائية
+        const correctKeywords = [
+            "مدرسة", "مدرسه", "ثانوية", "ثانويه", "الرياض", "riyadh", "Al Mahdiyah", 
+            "secondary school", "Al-Mahdiyah", "شارع", "حي", "الثانوية", "المدرسة"
+        ];
+
+        // الدالة الخاصة بالنسخ
+        function copyCoordinates() {
+            const coordinates = "24°38'46.3\"N 46°30'46.1\"E";  // الإحداثيات الخاصة
+            navigator.clipboard.writeText(coordinates)
+                .then(() => {
+                    document.querySelector('.سطر-الحالة').textContent = "[النظام] تم نسخ الإحداثيات بنجاح";
+                })
+                .catch(() => {
+                    document.querySelector('.سطر-الحالة').textContent = "[النظام] خطأ: فشل عملية النسخ";
+                });
+        }
+
+        // دالة التحقق من الموقع
+        function checkPlace() {
+            const userInput = document.getElementById("place-name").value.trim().toLowerCase();
+
+            // التحقق من أن النص المدخل يحتوي على أي من الكلمات المفتاحية
+            const isValid = correctKeywords.some(keyword => userInput.includes(keyword.toLowerCase()));
+            
+            if (isValid) {
+                document.getElementById("success-popup").style.display = "block";
+                document.querySelector('.سطر-الحالة').textContent = "[النظام] تم التحقق من الموقع بنجاح";
+            } else {
+                document.getElementById("error-popup").style.display = "block";
+                document.querySelector('.سطر-الحالة').textContent = "[النظام] فشل التحقق من الموقع";
+            }
+            document.getElementById("place-name").value = '';
+        }
+
+        // إغلاق النافذة المنبثقة عند الخطأ
+        function closeErrorPopup() {
+            document.getElementById("error-popup").style.display = "none";
+        }
+
+        // الانتقال للمستوى التالي
+        function nextChallenge() {
+            window.location.href = "next.html";
+        }
+
+        // تأثير التشويش
+        setInterval(() => {
+            const container = document.querySelector('.حاوية');
+            container.style.transform = `translate(${Math.random() * 2 - 1}px, ${Math.random() * 2 - 1}px)`;
+            setTimeout(() => {
+                container.style.transform = 'translate(0, 0)';
+            }, 50);
+        }, 3000);
+    </script>
+</body>
+</html>

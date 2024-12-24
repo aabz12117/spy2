@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <title>نظام الاختراق السري</title>
+    <style>
+        :root {
+            --neon-color: #0ff;
+            --bg-color: #000;
+            --text-color: #0ff; 
+            --error-color: #ff0000;
+            --gradient-start: rgba(0, 255, 255, 0.1);
+            --gradient-end: rgba(0, 15, 15, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 1rem;
+        }
+
+        .logo-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .logo {
+            width: 15vw;
+            max-width: 60px;
+            height: auto;
+            filter: drop-shadow(0 0 8px var(--neon-color));
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 255, 255, 0.03) 0px,
+                    rgba(0, 255, 255, 0.03) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: linear-gradient(145deg, var(--gradient-start), var(--gradient-end));
+            border: 2px solid var(--neon-color);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.2),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transform: translateZ(0);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle,
+                rgba(0, 255, 255, 0.1) 0%,
+                transparent 70%
+            );
+            animation: pulse 4s linear infinite;
+        }
+
+        .glitch-text {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            margin-bottom: 1.5rem;
+            position: relative;
+            text-shadow: 
+                2px 2px var(--error-color),
+                -2px -2px var(--neon-color);
+            animation: glitch 1s infinite;
+            letter-spacing: 2px;
+        }
+
+        .description {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            text-shadow: 0 0 5px var(--neon-color);
+        }
+
+        .start-button {
+            width: 100%;
+            max-width: 300px;
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 2px solid var(--neon-color);
+            color: var(--neon-color);
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: var(--neon-color);
+            transition: transform 0.5s ease;
+            transform: translate(-50%, -50%) rotate(45deg) translateY(100%);
+            z-index: -1;
+        }
+
+        .start-button:hover::before {
+            transform: translate(-50%, -50%) rotate(45deg) translateY(0);
+        }
+
+        .start-button:hover {
+            color: var(--bg-color);
+            box-shadow: 
+                0 0 20px var(--neon-color),
+                0 0 40px var(--neon-color);
+            text-shadow: none;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 95%;
+            max-width: 500px;
+            background: rgba(0, 20, 20, 0.95);
+            border: 2px solid var(--neon-color);
+            border-radius: 15px;
+            padding: 2rem;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 1.5rem 0;
+        }
+
+        .david-image,
+        .mysterious-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--neon-color);
+            box-shadow: 
+                0 0 15px var(--neon-color),
+                inset 0 0 10px var(--neon-color);
+            transition: transform 0.3s ease;
+        }
+
+        .david-image:hover,
+        .mysterious-image:hover {
+            transform: scale(1.1);
+        }
+
+        .mission-details {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--neon-color);
+            border-radius: 10px;
+            background: rgba(0, 255, 255, 0.05);
+            box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.1);
+        }
+
+        .mission-details p {
+            margin: 1rem 0;
+            line-height: 1.8;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .popup-buttons button {
+            padding: 0.8rem 2rem;
+            border: 2px solid var(--neon-color);
+            background: transparent;
+            color: var(--neon-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .popup-buttons button:hover {
+            background: var(--neon-color);
+            color: var(--bg-color);
+            box-shadow: 0 0 20px var(--neon-color);
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .loading-bar {
+            width: 80%;
+            max-width: 400px;
+            height: 4px;
+            background: rgba(0, 255, 255, 0.1);
+            position: relative;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: var(--neon-color);
+            animation: loading 3s infinite linear;
+            box-shadow: 0 0 10px var(--neon-color);
+        }
+
+        .loading-text {
+            color: var(--neon-color);
+            margin-top: 1rem;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .popup {
+                padding: 1.5rem;
+            }
+
+            .image-container {
+                gap: 15px;
+            }
+
+            .david-image,
+            .mysterious-image {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .popup {
+                padding: 1rem;
+            }
+
+            .popup-buttons {
+                flex-direction: column;
+            }
+
+            .popup-buttons button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="spy.png" alt="شعار الجاسوس" class="logo">
+    </div>
+
+    <div class="container">
+        <h1 class="glitch-text">نظام الاختراق السري</h1>
+        <p class="description">مرحباً بك في نظام الاختراق المتقدم. أنت الآن على وشك بدء مهمة سرية للغاية.</p>
+        <button class="start-button" onclick="openPopup()">بدء المهمة</button>
+    </div>
+
+    <div id="popup" class="popup">
+        <h2 class="glitch-text">تفاصيل المهمة السرية</h2>
+        <div class="image-container">
+            <img src="devd.jpg" alt="ديفيد" class="david-image">
+            <img src="mysterious.png" alt="المجرم المجهول" class="mysterious-image">
+        </div>
+        <div class="mission-details">
+            <p>الهدف: الكشف عن هوية الشخص المجهول الذي ساعد ديفيد على الهروب من السجن.</p>
+            <p>القصة: في عملية تفجير مفاجئة، تمكن شخص مجهول من تفجير بوابة السجن، مما سمح لجميع المساجين بالهروب. لكن، وعلى الرغم من تمكن الحراس من الإمساك بجميع السجناء، كان ديفيد هو الوحيد الذي تمكن من الهروب.</p>
+            <p>المهمة: عليك فك اللغز الذي تركه المجهول لي عصابتة.</p>
+            <p>درجة الخطورة: عالية</p>
+            <p>الوقت المتاح: 24 ساعة</p>
+        </div>
+        <div class="popup-buttons">
+            <button onclick="startMission()">تنفيذ المهمة</button>
+            <button onclick="closePopup()">إلغاء</button>
+        </div>
+    </div>
+
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        <div class="loading-text">جاري تحميل المهمة...</div>
+    </div>
+
+    <script>
+        let audioContext;
+
+        function initAudio() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        function generateSound(type) {
+            if (!audioContext) initAudio();
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            switch(type) {
+                case 'popup':
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    oscillator.type = 'sine';
+                    break;
+                case 'cancel':
+                    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    oscillator.type = 'triangle';
+                    break;
+                case 'start':
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    oscillator.type = 'square';
+                    break;
+            }
+
+            oscillator.start();
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        function openPopup() {
+            document.getElementById("popup").style.display = "block";
+            generateSound('popup');
+        }
+
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+            generateSound('cancel');
+        }
+
+        function startMission() {
+            const loadingScreen = document.getElementById("loading-screen");
+            loadingScreen.style.display = "flex";
+            generateSound('start');
+            
+            // إضافة تأثيرات إضافية أثناء التحميل
+            let dots = "";
+            const loadingText = loadingScreen.querySelector('.loading-text');
+            const loadingInterval = setInterval(() => {
+                dots = dots.length < 3 ? dots + "." : "";
+                loadingText.textContent = "جاري تحميل المهمة" + dots;
+            }, 500);
+
+            setTimeout(() => {
+                clearInterval(loadingInterval);
+                window.location.href = "mission_page.html";
+            }, 4000);
+        }
+
+        // إضافة مؤثرات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 0.5s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

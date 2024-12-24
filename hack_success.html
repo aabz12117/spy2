@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملفات الجنائية السرية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        
+        :root {
+            --folder-color: #e8d5b0;
+            --folder-dark: #d4bf91;
+            --red: #b30000;
+            --shadow: rgba(0,0,0,0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #242424;
+            min-height: 100vh;
+            padding: 10px;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            margin: 10px 0 20px;
+            color: #fff;
+            background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid var(--red);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .header h2 {
+            font-size: 1.2em;
+            color: #ddd;
+        }
+
+        .file-folder {
+            background: var(--folder-color);
+            width: 100%;
+            margin: 25px auto;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            position: relative;
+            border-radius: 0 8px 8px 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-folder:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+        }
+
+        .file-folder:before {
+            content: '';
+            width: 80px;
+            height: 20px;
+            background: var(--folder-dark);
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            border-radius: 5px 5px 0 0;
+            transform: skew(-15deg);
+        }
+
+        .stamp {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: var(--red);
+            border: 3px solid var(--red);
+            padding: 5px 10px;
+            transform: rotate(-15deg);
+            font-weight: bold;
+            font-size: 0.9em;
+            background: rgba(255,255,255,0.95);
+            z-index: 2;
+            animation: pulse 2s infinite;
+        }
+
+        .classification-label {
+            position: absolute;
+            top: -8px;
+            right: 110px;
+            background: var(--red);
+            color: white;
+            padding: 4px 10px;
+            font-size: 0.8em;
+            z-index: 1;
+            border-radius: 3px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .file-content {
+            display: none;
+            background: #fff;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            object-fit: cover;
+            float: left;
+            margin: 0 15px 15px 0;
+            border: 3px solid var(--red);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .details {
+            margin: 10px 0;
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        .red-text {
+            color: var(--red);
+            border-bottom: 2px solid var(--red);
+            padding-bottom: 5px;
+            margin: 15px 0 10px;
+            font-size: 1.1em;
+        }
+
+        .paper-texture {
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .paper-texture::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/png;base64,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');
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-top: 5px;
+        }
+
+        p {
+            margin: 8px 0;
+            font-size: 0.95em;
+        }
+
+        @keyframes pulse {
+            0% { transform: rotate(-15deg) scale(1); }
+            50% { transform: rotate(-15deg) scale(1.05); }
+            100% { transform: rotate(-15deg) scale(1); }
+        }
+
+        @media screen and (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .header h2 {
+                font-size: 1em;
+            }
+
+            .stamp {
+                font-size: 0.8em;
+                padding: 4px 8px;
+            }
+
+            .classification-label {
+                font-size: 0.7em;
+                padding: 3px 8px;
+            }
+
+            .file-folder {
+                padding: 12px;
+            }
+
+            .file-content {
+                padding: 12px;
+            }
+
+            .profile-image {
+                width: 100px;
+                height: 100px;
+                margin: 0 0 10px 0;
+                float: none;
+                display: block;
+                margin: 0 auto 15px auto;
+            }
+
+            p {
+                font-size: 0.9em;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            .file-folder {
+                width: 90%;
+                max-width: 800px;
+                padding: 20px;
+            }
+
+            .header {
+                padding: 20px;
+                margin: 20px auto 30px;
+                max-width: 800px;
+            }
+
+            .header h1 {
+                font-size: 2.2em;
+            }
+
+            .stamp {
+                font-size: 1.1em;
+                padding: 8px 15px;
+            }
+
+            .profile-image {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>مديرية الأمن العام</h1>
+        <h2>إدارة المباحث الجنائية</h2>
+    </div>
+
+    <div class="file-folder" onclick="toggleFile(this)">
+        <div class="stamp">سري للغاية</div>
+        <div class="classification-label">تصنيف درجة الاولى</div>
+        <h2>ملف جنائي رقم: A-2024/001</h2>
+        <div class="file-content">
+            <div class="paper-texture">
+                <img src="devd.jpg" alt="صورة ديفيد النجار" class="profile-image">
+                <div class="details">
+                    <h3 class="red-text">معلومات شخصية:</h3>
+                    <p>الاسم: ديفيد عبدالله النجار</p>
+                    <p>تاريخ الميلاد: 15/3/1976</p>
+                    <p>مكان الولادة: الرياض</p>
+                    <p>الرقم القومي: 1132397122</p>
+
+                    <h3 class="red-text">السجل الجنائي:</h3>
+                    <p>⚠️ 1990: اختراق شبكة اتصالات محلية</p>
+                    <p>⚠️ 1994: اختراق أنظمة مصرفية</p>
+                    <p>⚠️ 1999: تطوير برمجيات خبيثة</p>
+                    <p>⚠️ 2024: محاولة تهكير أنظمة كأس العالم</p>
+
+                    <h3 class="red-text">آخر قضية:</h3>
+                    <p>📅 تاريخ القبض: 1/12/2024</p>
+                    <p>⚖️ التهمة: هروب من السجن</p>
+                    <p>📋 حالة القضية: قيد التحقيق</p>
+
+                    <h3 class="red-text">ملاحظات خاصة:</h3>
+                    <p>🔴 خطير - يجب توخي الحذر</p>
+                    <p>🔴 له علاقات مع عصابات منظمة</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-folder" onclick="toggleFile(this)">
+        <div class="stamp">سري للغاية</div>
+        <div class="classification-label">تصنيف درجة الاولى</div>
+        <h2>ملف جنائي رقم: A-2024/002</h2>
+        <div class="file-content">
+            <div class="paper-texture">
+                <img src="jon.jpg" alt="صورة جون النجار" class="profile-image">
+                <div class="details">
+                    <h3 class="red-text">معلومات شخصية:</h3>
+                    <p>الاسم: جون النجار</p>
+                    <p>تاريخ الميلاد: 11/3/1976</p>
+                    <p>مكان الولادة: الرياض</p>
+                    <p>الهوية: 1132397123</p>
+
+                    <h3 class="red-text">السجل الجنائي:</h3>
+                    <p>⚠️ 2010: تقديم دعم تقني لعصابات دولية</p>
+                    <p>⚠️ 2013: اختراق أنظمة أمنية لتسهيل تهريب أسلحة</p>
+                    <p>⚠️ 2024: تفجير باب السجن وتهريب "ديفيد النجار"</p>
+                    <p>⚠️ 2024: تقديم معلومات للعصابة لتجنب الملاحقة الأمنية</p>
+
+                    <h3 class="red-text">آخر قضية:</h3>
+                    <p>📅 تاريخ القبض: 20/12/2024</p>
+                    <p>⚖️ التهمة: تفجير باب السجن</p>
+                    <p>📋 حالة القضية: قيد المحاكمة</p>
+
+                    <h3 class="red-text">ملاحظات خاصة:</h3>
+                    <p>🔴 خبير في المتفجرات</p>
+                    <p>🔴 خطير للغاية</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleFile(element) {
+            const content = element.querySelector('.file-content');
+            const allContents = document.querySelectorAll('.file-content');
+            
+            allContents.forEach(c => {
+                if(c !== content && c.style.display === 'block') {
+                    c.style.display = 'none';
+                    c.parentElement.style.transform = '';
+                }
+            });
+
+            if(content.style.display === 'block') {
+                content.style.display = 'none';
+                element.style.transform = '';
+            } else {
+                content.style.display = 'block';
+                element.style.transform = 'translateY(-5px)';
+            }
+        }
+
+        // تحسين أداء التحميل
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.loading = 'lazy';
+            });
+        });
+    </script>
+</body>
+</html>

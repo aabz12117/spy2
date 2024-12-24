@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القصة: القبض على المجرمين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            font-family: 'Cairo', sans-serif;
+            color: #00ff00;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .شاشة-الاختراق {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0.03) 0px,
+                rgba(0, 255, 0, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            animation: مسح 8s linear infinite;
+        }
+
+        @keyframes مسح {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .حاوية {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 10, 0, 0.7);
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #00ff00;
+            position: relative;
+        }
+
+        h1::before {
+            content: ">";
+            position: absolute;
+            right: -30px;
+            animation: وميض 1s infinite;
+        }
+
+        @keyframes وميض {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .شاشة-عرض {
+            background: rgba(0, 20, 0, 0.8);
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #00ff00;
+            position: relative;
+            font-size: 1.4em;
+            line-height: 1.8;
+            text-align: center;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .زر {
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 12px 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+            position: relative;
+            overflow: hidden;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .زر:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        .سطر-الحالة {
+            font-size: 0.9em;
+            color: #00ff00;
+            margin-top: 20px;
+            padding: 10px;
+            border-top: 1px solid #00ff00;
+            direction: rtl;
+        }
+    </style>
+</head>
+<body>
+    <div class="شاشة-الاختراق"></div>
+    <div class="حاوية">
+        <h1>تقرير القبض على المجرمين</h1>
+
+        <div class="شاشة-عرض">
+            <p>بعد حل اللغز وكشف مكان المجرمين، تم مداهمة الموقع في <strong>مدرسة</strong> تقع في الإحداثيات: <strong>24°38'46.3"N 46°30'46.1"E</strong>.</p>
+            <p>ديفيد، ابن عم جون، كان هو العقل المدبر لعدة عمليات سرقة وتهريب في المنطقة. كان هو وجون يختبئان في هذه المدرسة لفترة طويلة، ونجحا في تجنب القبض عليهما مرارًا وتكرارًا.</p>
+            <p>لكن بعد عملية المداهمة التي شارك فيها فريق متخصص من الشرطة، تم القبض على الاثنين في نفس الوقت. تم العثور في الموقع على أدلة تشير إلى تورطهم في العديد من الجرائم الكبرى.</p>
+            <p>وتم العثور أيضًا على كمية كبيرة من المواد المسروقة، بما في ذلك أجهزة إلكترونية وأموال نقدية. خسائر المواد كانت ضخمة، ولكن بفضل جهود الشرطة، تم إغلاق هذا الملف بنجاح.</p>
+            <p>الشرطة قامت بإغلاق الموقع وتأمين جميع الأدلة التي تم العثور عليها، وسيتم تقديمهم للمحاكمة في الأيام القليلة القادمة. وهذا يُعد انتصارًا كبيرًا في مكافحة الجريمة في المنطقة.</p>
+        </div>
+
+        <div class="شاشة-عرض">
+            <p>شكرًا لك أيها الجاسوس على كشفك لمكان المجرمين! لقد كنت جزءًا من عملية كبيرة لوقف الأنشطة الإجرامية في المنطقة.</p>
+        </div>
+
+        <a href="hack_success.html">
+            <button class="زر">عرض ملفات القضية</button>
+        </a>
+
+        <button class="زر" onclick="goBack()">الرجوع إلى الصفحة الرئيسية</button>
+
+        <div class="سطر-الحالة">
+            [النظام] تم عرض تقرير القبض على المجرمين بنجاح.
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = "index.html";  // يمكنك تغيير الرابط إلى الصفحة المناسبة
+        }
+    </script>
+</body>
+</html>

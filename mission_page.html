@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لغز الاختراق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #00ff41;
+            --cyber-blue: #0ff;
+            --matrix-green: #00ff9d;
+            --error-red: #ff0033;
+            --bg-dark: #0a0a0a;
+            --dark-overlay: rgba(0, 10, 2, 0.95);
+            --terminal-green: #4af626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', monospace;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            color: var(--neon-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--dark-overlay);
+            border: 2px solid var(--matrix-green);
+            border-radius: 5px;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+            z-index: 2;
+            animation: bootSequence 1s ease-out;
+        }
+
+        .glitch-text {
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--terminal-green);
+            text-shadow: 0 0 5px var(--terminal-green);
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+
+        .puzzle {
+            font-size: 1.3em;
+            margin: 25px 0;
+            padding: 20px 30px;
+            border-right: 3px solid var(--matrix-green);
+            background: rgba(0, 255, 0, 0.05);
+            text-shadow: 0 0 3px var(--neon-green);
+            line-height: 1.8;
+            position: relative;
+            color: var(--neon-green);
+            z-index: 2;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 20, 0, 0.8);
+            border: 2px solid var(--matrix-green);
+            border-radius: 4px;
+            color: var(--terminal-green);
+            font-size: 1.2em;
+            text-align: center;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            box-shadow: 0 0 20px var(--matrix-green);
+            border-color: var(--cyber-blue);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: transparent;
+            border: 2px solid var(--matrix-green);
+            color: var(--matrix-green);
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background: var(--matrix-green);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px var(--matrix-green);
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 450px;
+            background: var(--dark-overlay);
+            border: 2px solid var(--matrix-green);
+            padding: 25px;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .popup h2 {
+            color: var(--terminal-green);
+            margin-bottom: 15px;
+        }
+
+        .popup button {
+            padding: 10px 20px;
+            margin: 10px;
+            background: transparent;
+            border: 2px solid var(--matrix-green);
+            color: var(--matrix-green);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .popup button:hover {
+            background: var(--matrix-green);
+            color: var(--bg-dark);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 255, 0, 0.1);
+            margin: 20px 0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--matrix-green);
+            transition: width 0.5s ease;
+        }
+
+        @keyframes bootSequence {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes glitch {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-2deg); }
+            40% { transform: skew(2deg); }
+            60% { transform: skew(-1deg); }
+            80% { transform: skew(1deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+    <div class="container">
+        <h1 class="glitch-text">نظام الاختراق v2.0</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="puzzle">
+            لغز مهمتك: "أنا أداة تساعدك على الوصول إلى وجهتك دون أن تضيع، أظهر لك الطريق الصحيح عبر المسارات والأماكن. أرشدك خطوة بخطوة، وإذا كنت تائهًا، فأنا دليلك الوحيد. ما أنا؟"
+        </div>
+        <input type="text" id="answer" class="input-field" placeholder="أدخل إجابتك هنا" autocomplete="off">
+        <button class="submit-button" onclick="checkAnswer()">تحقق من الإجابة</button>
+    </div>
+
+    <div id="error-popup" class="popup">
+        <h2>محاولة خاطئة</h2>
+        <p id="error-message"></p>
+        <button onclick="closeErrorPopup()">حاول مرة أخرى</button>
+    </div>
+
+    <div id="success-popup" class="popup">
+        <h2>مبروك!</h2>
+        <p>تم اختراق النظام بنجاح</p>
+        <button onclick="nextMission()">المستوى التالي</button>
+        <button onclick="goBack()">العودة للقائمة</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const arabic = "ابتثجحخدذرزسشصضطظعغفقكلمنهوي١٢٣٤٥٦٧٨٩٠";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = arabic[Math.floor(Math.random() * arabic.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        let attempts = 0;
+        const maxAttempts = 3;
+        const progressFill = document.getElementById('progressFill');
+        const hints = [
+            'تلميح: تستخدم لتحديد المواقع',
+            'تلميح: موجودة في كل تطبيقات الملاحة',
+            'تلميح: تظهر جميع الطرق والمسارات'
+        ];
+
+        function updateProgress() {
+            const progress = (attempts / maxAttempts) * 100;
+            progressFill.style.width = `${progress}%`;
+        }
+
+        function checkAnswer() {
+            const answer = document.getElementById("answer").value.trim().toLowerCase();
+            const validAnswers = ["خريطة", "خريطه", "الخريطة", "الخريطه", "map", "خرائط", "الخرائط"];
+            
+            if (validAnswers.includes(answer)) {
+                showSuccessPopup();
+                resetAttempts();
+            } else {
+                attempts++;
+                updateProgress();
+                showError();
+                
+                if (attempts >= maxAttempts) {
+                    showHint();
+                    resetAttempts();
+                }
+            }
+            document.getElementById("answer").value = '';
+        }
+
+        function showError() {
+            const popup = document.getElementById("error-popup");
+            const message = document.getElementById("error-message");
+            message.textContent = attempts >= maxAttempts ? 
+                hints[Math.floor(Math.random() * hints.length)] : 
+                'إجابة خاطئة. حاول مرة أخرى.';
+            popup.style.display = "block";
+        }
+
+        function showSuccessPopup() {
+            document.getElementById("success-popup").style.display = "block";
+        }
+
+        function closeErrorPopup() {
+            document.getElementById("error-popup").style.display = "none";
+        }
+
+        function resetAttempts() {
+            attempts = 0;
+            updateProgress();
+        }
+
+        function showHint() {
+            const hint = hints[Math.floor(Math.random() * hints.length)];
+            document.getElementById("error-message").textContent = hint;
+        }
+
+        function nextMission() {
+            window.location.href = "next_mission.html";
+        }
+
+        function goBack() {
+            window.location.href = "mission_page.html";
+        }
+
+        document.getElementById("answer").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkAnswer();
+            }
+        });
+    </script>
+</body>
+</html>
