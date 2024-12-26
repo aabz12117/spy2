@@ -19,21 +19,23 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif; /* استخدام خط أوضح */
+            font-family: 'Arial', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
     
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            position: relative;
-            padding: 1rem;
-        }
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;  /* يمنع التمرير الأفقي */
+    overflow-y: auto;    /* يسمح بالتمرير العمودي */
+    position: relative;
+    padding: 1rem;
+}
+
     
         .logo-container {
             position: fixed;
@@ -89,7 +91,6 @@
             overflow: hidden;
             text-align: center;
             backdrop-filter: blur(10px);
-            transform: translateZ(0);
         }
     
         .container::before {
@@ -108,7 +109,7 @@
         }
     
         .glitch-text {
-            font-size: clamp(1.8rem, 5vw, 3rem); /* زيادة الحجم بشكل أكبر */
+            font-size: clamp(1.8rem, 5vw, 3rem);
             margin-bottom: 1.5rem;
             position: relative;
             text-shadow: 
@@ -119,7 +120,7 @@
         }
     
         .description {
-            font-size: clamp(1.1rem, 3vw, 1.3rem); /* زيادة وضوح الخط */
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
             margin-bottom: 2rem;
             line-height: 1.8;
             opacity: 0.9;
@@ -133,7 +134,7 @@
             background: transparent;
             border: 2px solid var(--neon-color);
             color: var(--neon-color);
-            font-size: clamp(1.2rem, 3vw, 1.5rem); /* زيادة حجم النص */
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -165,7 +166,6 @@
             box-shadow: 
                 0 0 20px var(--neon-color),
                 0 0 40px var(--neon-color);
-            text-shadow: none;
         }
     
         .popup {
@@ -240,7 +240,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border-radius: 8px;
-            font-size: clamp(1.2rem, 3vw, 1.4rem); /* زيادة حجم الأزرار */
+            font-size: clamp(1.2rem, 3vw, 1.4rem);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -323,7 +323,6 @@
         @media (max-width: 768px) {
             .container {
                 padding: 1.5rem;
-                max-width: 90%;
             }
     
             .popup {
@@ -390,6 +389,7 @@
         }
     </style>
     
+    
 <body>
     <div class="logo-container">
         <img src="spy.png" alt="شعار الجاسوس" class="logo">
@@ -409,10 +409,9 @@
         </div>
         <div class="mission-details">
             <p>الهدف: الكشف عن هوية الشخص المجهول الذي ساعد ديفيد على الهروب من السجن.</p>
-            <p>القصة: في عملية تفجير مفاجئة، تمكن شخص مجهول من تفجير بوابة السجن، مما سمح لجميع المساجين بالهروب. لكن، وعلى الرغم من تمكن الحراس من الإمساك بجميع السجناء، كان ديفيد هو الوحيد الذي تمكن من الهروب.</p>
-            <p>المهمة: عليك فك اللغز الذي تركه المجهول لي عصابتة.</p>
-            <p>درجة الخطورة: عالية</p>
-            <p>الوقت المتاح: 24 ساعة</p>
+            <p>القصة: في عملية تفجير مفاجئة، تمكن شخص مجهول من تفجير بوابة السجن،، كان ديفيد هو الوحيد الذي تمكن من الهروب.</p>
+            <p>المهمة: عليك فك اللغز الذي تركه المجهول.</p>
+
         </div>
         <div class="popup-buttons">
             <button onclick="startMission()">تنفيذ المهمة</button>
